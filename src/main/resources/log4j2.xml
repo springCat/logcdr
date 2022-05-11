@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+  <Properties>
+    <Property name="appname">cpts-booksheet-service</Property>
+    <Property name="loglevel">info</Property>
+    <Property name="filesuffix">%d{yyyyMMdd}-%i</Property>
+  </Properties>
+  <Appenders>
+    <Console name="STDOUT" target="SYSTEM_OUT"/>
+<!--    <RollingFile name="9X" fileName="REPORT/buffer/TMP_9X.txt" filePattern="REPORT/buffer/TMP_springcat${ctx:ip}${ctx:cdrNo}%d{yyyyMMddHHmmss}.txt">-->
+<!--      <Policies>-->
+<!--        <SizeBasedTriggeringPolicy size="100 MB"/>-->
+<!--        <TimeBasedTriggeringPolicy interval="300" modulate="true"/>-->
+<!--      </Policies>-->
+<!--      <DefaultRolloverStrategy fileIndex="max" max="1000"/>-->
+<!--    </RollingFile>-->
+  </Appenders>
+
+  <Loggers>
+    <Logger name="org.springcat.logcdr.cdrlog4j" additivity="false">
+    </Logger>
+
+    <Root level="${loglevel}" additivity="false">
+      <AppenderRef ref="STDOUT"/>
+    </Root>
+
+  </Loggers>
+</Configuration>
