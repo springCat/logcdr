@@ -6,7 +6,7 @@ public class Test {
 
     public static void main(String[] args) {
 
-        LocalFile2DbConf<DemoEntity> ossFile2DbConf = new LocalFile2DbConf<DemoEntity>("/Users/springcat/Downloads/springcatsnsplt00480819X20220510091359.txt");
+        LocalFile2DbConf<DemoEntity> ossFile2DbConf = new LocalFile2DbConf<DemoEntity>("/Users/springcat/Downloads/ireadsnsplt00480819X20220510091359.txt");
 
         new DemoFile2DbHandler()
                 .start(ossFile2DbConf);

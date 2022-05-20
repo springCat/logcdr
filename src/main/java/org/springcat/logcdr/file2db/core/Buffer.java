@@ -21,11 +21,13 @@ public class Buffer<T> {
 
     @SneakyThrows
     public T get(){
-        Object data = pool.poll(1000, TimeUnit.MILLISECONDS);
-        if(data == STOP_FLAG){
-            return null;
+        while (true) {
+            Object data = pool.poll();
+            if(data == null){
+                continue;
+            }
+            return (T) data;
         }
-        return (T) data;
     }
 
     /**

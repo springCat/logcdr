@@ -11,7 +11,7 @@ import java.io.File;
 @Setter
 public class LocalFile2DbConf<T> extends File2DbConf<T>{
 
-    Log LOGGER = LogFactory.get();
+    private static Log LOGGER = LogFactory.get();
 
     private String localFilePath;
 
@@ -24,13 +24,6 @@ public class LocalFile2DbConf<T> extends File2DbConf<T>{
         File localFile = FileUtil.newFile(localFilePath);
         setDateFile(localFile);
         LOGGER.info("init localFile:{}",localFile.getName());
-    }
-
-    @Override
-    public void destory() {
-        //备份原来话单文件或者删除文件
-        FileUtil.del(getDateFile());
-        LOGGER.info("delete localFile:{}",getDateFile().getName());
     }
 
 }

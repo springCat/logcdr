@@ -47,7 +47,7 @@ public interface File2DbHandler<T> {
         ExecutorService workPool = file2DbConf.getWorkPool();
 
         CountDownLatch countDownLatch = new CountDownLatch(dbOutputNum+1);
-
+        System.out.println(dbOutputNum+1);
         workPool.execute(()-> {
             try {
                 FileUtil.readLines(dateFile, Charset.defaultCharset(), (LineHandler) line -> {
@@ -60,6 +60,7 @@ public interface File2DbHandler<T> {
                 });
                 buffer.stop(dbOutputNum);
             } finally {
+                System.out.println("producer"+-1);
                 countDownLatch.countDown();
             }
         });
@@ -69,8 +70,8 @@ public interface File2DbHandler<T> {
                 try {
                     while (true) {
                         T data = buffer.get();
-                        if (data == null) {
-                            return;
+                        if (data == buffer.STOP_FLAG) {
+                            break;
                         }
 
                         try {
@@ -80,6 +81,7 @@ public interface File2DbHandler<T> {
                         }
                     }
                 }finally {
+                    System.out.println("consumer"+-1);
                     countDownLatch.countDown();
                 }
             });

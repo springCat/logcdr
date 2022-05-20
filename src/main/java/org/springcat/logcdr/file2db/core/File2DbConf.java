@@ -1,6 +1,7 @@
 package org.springcat.logcdr.file2db.core;
 
 import cn.hutool.core.thread.GlobalThreadPool;
+import cn.hutool.core.thread.ThreadUtil;
 import lombok.Data;
 import java.io.File;
 import java.util.Map;
@@ -12,7 +13,7 @@ public abstract class File2DbConf<T> {
 
     private File dateFile;
 
-    private int dbOutputNum = 1;
+    private int dbOutputNum = 2;
 
     private Buffer<T> buffer = new Buffer<T>();
 
@@ -24,5 +25,7 @@ public abstract class File2DbConf<T> {
 
     public abstract void init();
 
-    public abstract void destory();
+    public void destory(){
+        GlobalThreadPool.getExecutor().shutdownNow();
+    }
 }
