@@ -24,7 +24,7 @@ public class DemoFile2DbFactory implements File2DbFactory<DemoEntity> {
 
     @Override
     public void save(File2DbWorker<DemoEntity> file2DbWorker, DemoEntity object) {
-        System.out.println("save:"+ object);
+        System.out.println("save:"+ object + " thread:"+Thread.currentThread().getId());
         //save DemoLogCdr
     }
 

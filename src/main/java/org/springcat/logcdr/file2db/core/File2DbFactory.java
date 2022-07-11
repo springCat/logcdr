@@ -50,8 +50,10 @@ public interface File2DbFactory<T> {
                 FileUtil.readLines(dateFile, Charset.defaultCharset(), (LineHandler) line -> {
                     try {
                         List<String> colums = StrUtil.split(line, "|");
-                        buffer.put(covertTo(file2DbWorker, colums));
+                        T entity = covertTo(file2DbWorker, colums);
+                        buffer.put(entity);
                     } catch (Exception e) {
+                        file2DbWorker.getFaildNum().incrementAndGet();
                         LOGGER.error("File2DbHandler input error:" + e.getMessage() + " data" + line);
                     }
                 });
@@ -72,8 +74,10 @@ public interface File2DbFactory<T> {
 
                         try {
                             save(file2DbWorker, data);
+                            file2DbWorker.getSuccessNum().incrementAndGet();
                         } catch (Exception e){
                             LOGGER.error("File2DbHandler output error:"+e.getMessage()+" data:"+data);
+                            file2DbWorker.getFaildNum().incrementAndGet();
                         }
                     }
                 }finally {
