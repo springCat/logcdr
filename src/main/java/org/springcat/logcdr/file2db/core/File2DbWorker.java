@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicLong;
 @Data
 public abstract class File2DbWorker<T> {
 
-    private int dbOutputNum = 2;
+    private int dbOutputNum = 5;
 
     private AtomicLong successNum = new AtomicLong(0);
 
