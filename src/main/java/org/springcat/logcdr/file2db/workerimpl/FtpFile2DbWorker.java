@@ -1,7 +1,8 @@
-package org.springcat.logcdr.file2db.core;
+package org.springcat.logcdr.file2db.workerimpl;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.extra.ftp.Ftp;
+import org.springcat.logcdr.file2db.core.File2DbWorker;
 
 import java.io.File;
 

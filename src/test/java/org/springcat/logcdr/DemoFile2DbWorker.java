@@ -1,9 +1,9 @@
-package org.springcat.logcdr.file2db.impl;
+package org.springcat.logcdr;
 
 
 import lombok.Data;
 import org.springcat.logcdr.file2db.core.File2DbWorker;
-import org.springcat.logcdr.file2db.core.LocalFile2DbWorker;
+import org.springcat.logcdr.file2db.workerimpl.LocalFile2DbWorker;
 import java.util.List;
 
 

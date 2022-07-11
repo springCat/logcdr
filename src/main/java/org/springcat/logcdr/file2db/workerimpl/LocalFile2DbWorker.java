@@ -1,10 +1,12 @@
-package org.springcat.logcdr.file2db.core;
+package org.springcat.logcdr.file2db.workerimpl;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
 import lombok.Getter;
 import lombok.Setter;
+import org.springcat.logcdr.file2db.core.File2DbWorker;
+
 import java.io.File;
 
 @Getter
