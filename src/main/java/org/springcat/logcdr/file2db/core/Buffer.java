@@ -2,7 +2,6 @@ package org.springcat.logcdr.file2db.core;
 
 import lombok.SneakyThrows;
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 简单自定的buffer，后续控速，监控可以在上面扩展，目前没有需求，先简单处理

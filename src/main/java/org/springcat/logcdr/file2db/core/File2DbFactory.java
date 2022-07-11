@@ -15,24 +15,22 @@ import java.util.concurrent.ExecutorService;
  * core handler 类
  * @param <T>
  */
-public interface File2DbHandler<T> {
+public interface File2DbFactory<T> {
 
     Log LOGGER = LogFactory.get();
 
-    T covertTo(File2DbConf<T> file2DbConf,List<String> colums);
+    T covertTo(File2DbWorker<T> file2DbWorker, List<String> colums);
 
-    void save(File2DbConf<T> file2DbConf,T object);
+    void save(File2DbWorker<T> file2DbWorker, T object);
 
-    void before(File2DbConf<T> file2DbConf);
+    void before(File2DbWorker<T> file2DbWorker);
 
-    void after(File2DbConf<T> file2DbConf);
+    void after(File2DbWorker<T> file2DbWorker);
 
     @SneakyThrows
-    default void start(File2DbConf<T> file2DbConf){
+    default void start(File2DbWorker<T> file2DbWorker){
 
-        file2DbConf.init();
-
-        File dateFile = file2DbConf.getDateFile();
+        File dateFile = file2DbWorker.init();
 
         if(!FileUtil.exist(dateFile)){
             LOGGER.error("file:{} not exist",dateFile.getName());
@@ -40,11 +38,11 @@ public interface File2DbHandler<T> {
         }
 
         //before hook
-        before(file2DbConf);
+        before(file2DbWorker);
 
-        Buffer<T> buffer = file2DbConf.getBuffer();
-        int dbOutputNum = file2DbConf.getDbOutputNum();
-        ExecutorService workPool = file2DbConf.getWorkPool();
+        Buffer<T> buffer = file2DbWorker.getBuffer();
+        int dbOutputNum = file2DbWorker.getDbOutputNum();
+        ExecutorService workPool = file2DbWorker.getWorkPool();
 
         CountDownLatch countDownLatch = new CountDownLatch(dbOutputNum+1);
         workPool.execute(()-> {
@@ -52,7 +50,7 @@ public interface File2DbHandler<T> {
                 FileUtil.readLines(dateFile, Charset.defaultCharset(), (LineHandler) line -> {
                     try {
                         List<String> colums = StrUtil.split(line, "|");
-                        buffer.put(covertTo(file2DbConf, colums));
+                        buffer.put(covertTo(file2DbWorker, colums));
                     } catch (Exception e) {
                         LOGGER.error("File2DbHandler input error:" + e.getMessage() + " data" + line);
                     }
@@ -73,7 +71,7 @@ public interface File2DbHandler<T> {
                         }
 
                         try {
-                            save(file2DbConf, data);
+                            save(file2DbWorker, data);
                         } catch (Exception e){
                             LOGGER.error("File2DbHandler output error:"+e.getMessage()+" data:"+data);
                         }
@@ -86,9 +84,9 @@ public interface File2DbHandler<T> {
         countDownLatch.await();
 
         //after hook
-        after(file2DbConf);
+        after(file2DbWorker);
 
-        file2DbConf.destory();
+        file2DbWorker.destory();
     }
 
 

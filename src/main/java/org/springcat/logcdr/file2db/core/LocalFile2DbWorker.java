@@ -9,21 +9,21 @@ import java.io.File;
 
 @Getter
 @Setter
-public class LocalFile2DbConf<T> extends File2DbConf<T>{
+public class LocalFile2DbWorker<T> extends File2DbWorker<T> {
 
     private static Log LOGGER = LogFactory.get();
 
     private String localFilePath;
 
-    public LocalFile2DbConf(String localFilePath){
+    public LocalFile2DbWorker(String localFilePath){
         this.localFilePath = localFilePath;
     }
 
     @Override
-    public void init (){
+    public File init (){
         File localFile = FileUtil.newFile(localFilePath);
-        setDateFile(localFile);
         LOGGER.info("init localFile:{}",localFile.getName());
+        return localFile;
     }
 
 }
