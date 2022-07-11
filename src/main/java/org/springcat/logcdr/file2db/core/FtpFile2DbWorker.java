@@ -5,12 +5,16 @@ import cn.hutool.extra.ftp.Ftp;
 
 import java.io.File;
 
-public class FtpFile2DbWorker<T> extends File2DbWorker<T> {
+public abstract class FtpFile2DbWorker<T> extends File2DbWorker<T> {
+
+    private Ftp ftp = new Ftp("172.0.0.1");
 
     @Override
     public File init() {
-        //匿名登录（无需帐号密码的FTP服务器）
-        Ftp ftp = new Ftp("172.0.0.1");
+        return getFile();
+    }
+
+    private File getFile(){
         //进入远程目录
         ftp.cd("/opt/upload");
         //下载远程文件
@@ -18,4 +22,6 @@ public class FtpFile2DbWorker<T> extends File2DbWorker<T> {
         ftp.download("/opt/upload", "test.jpg", file);
         return file;
     }
+
+
 }

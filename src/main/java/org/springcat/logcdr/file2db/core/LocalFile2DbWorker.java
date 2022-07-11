@@ -9,12 +9,11 @@ import java.io.File;
 
 @Getter
 @Setter
-public class LocalFile2DbWorker<T> extends File2DbWorker<T> {
+public abstract class LocalFile2DbWorker<T> extends File2DbWorker<T> {
 
     private static Log LOGGER = LogFactory.get();
 
     private String localFilePath;
-
 
     public LocalFile2DbWorker(String localFilePath){
         this.localFilePath = localFilePath;

@@ -7,7 +7,7 @@ import java.util.concurrent.ArrayBlockingQueue;
  * 简单自定的buffer，后续控速，监控可以在上面扩展，目前没有需求，先简单处理
  * @param <T>
  */
-public class Buffer<T> {
+public class File2DbBuffer {
 
     private ArrayBlockingQueue pool = new ArrayBlockingQueue(10000);
 
@@ -19,13 +19,13 @@ public class Buffer<T> {
     }
 
     @SneakyThrows
-    public T get(){
+    public Object get(){
         while (true) {
             Object data = pool.poll();
             if(data == null){
                 continue;
             }
-            return (T) data;
+            return data;
         }
     }
 

@@ -13,22 +13,13 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 /**
  * core handler 类
- * @param <T>
  */
-public interface File2DbFactory<T> {
+public class File2DbFactory {
 
-    Log LOGGER = LogFactory.get();
-
-    T covertTo(File2DbWorker<T> file2DbWorker, List<String> colums);
-
-    void save(File2DbWorker<T> file2DbWorker, T object);
-
-    void before(File2DbWorker<T> file2DbWorker);
-
-    void after(File2DbWorker<T> file2DbWorker);
+    private final static Log LOGGER = LogFactory.get();
 
     @SneakyThrows
-    default void start(File2DbWorker<T> file2DbWorker){
+    public static void start(File2DbWorker file2DbWorker){
 
         File dateFile = file2DbWorker.init();
 
@@ -38,9 +29,9 @@ public interface File2DbFactory<T> {
         }
 
         //before hook
-        before(file2DbWorker);
+        file2DbWorker.before(file2DbWorker);
 
-        Buffer<T> buffer = file2DbWorker.getBuffer();
+        File2DbBuffer buffer = file2DbWorker.getBuffer();
         int dbOutputNum = file2DbWorker.getDbOutputNum();
         ExecutorService workPool = file2DbWorker.getWorkPool();
 
@@ -50,10 +41,9 @@ public interface File2DbFactory<T> {
                 FileUtil.readLines(dateFile, Charset.defaultCharset(), (LineHandler) line -> {
                     try {
                         List<String> colums = StrUtil.split(line, "|");
-                        T entity = covertTo(file2DbWorker, colums);
-                        buffer.put(entity);
+                        buffer.put(file2DbWorker.covertTo(file2DbWorker, colums));
                     } catch (Exception e) {
-                        file2DbWorker.getFaildNum().incrementAndGet();
+                        file2DbWorker.getFailedNum().incrementAndGet();
                         LOGGER.error("File2DbHandler input error:" + e.getMessage() + " data" + line);
                     }
                 });
@@ -67,17 +57,17 @@ public interface File2DbFactory<T> {
             workPool.execute(()->{
                 try {
                     while (true) {
-                        T data = buffer.get();
+                        Object data = buffer.get();
                         if (data == buffer.STOP_FLAG) {
                             break;
                         }
 
                         try {
-                            save(file2DbWorker, data);
+                            file2DbWorker.save(file2DbWorker, data);
                             file2DbWorker.getSuccessNum().incrementAndGet();
                         } catch (Exception e){
                             LOGGER.error("File2DbHandler output error:"+e.getMessage()+" data:"+data);
-                            file2DbWorker.getFaildNum().incrementAndGet();
+                            file2DbWorker.getFailedNum().incrementAndGet();
                         }
                     }
                 }finally {
@@ -88,7 +78,7 @@ public interface File2DbFactory<T> {
         countDownLatch.await();
 
         //after hook
-        after(file2DbWorker);
+        file2DbWorker.after(file2DbWorker);
 
         file2DbWorker.destory();
     }
