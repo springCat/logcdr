@@ -4,9 +4,6 @@ import cn.hutool.core.date.TimeInterval;
 import cn.hutool.core.thread.GlobalThreadPool;
 import cn.hutool.log.Log;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.io.File;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +11,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicLong;
 
+/**
+ *  一个生产者，多个消费者组队的模式，一般来说够用。
+ *  如果要实现多个生产者的模式，可以多new几个worker组，进一步提升并发能力
+ * @param <T>
+ */
 @Data
 public abstract class File2DbWorker<T> {
 

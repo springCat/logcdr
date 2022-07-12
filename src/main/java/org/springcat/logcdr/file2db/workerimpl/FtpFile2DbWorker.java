@@ -41,11 +41,9 @@ public abstract class FtpFile2DbWorker<T> extends File2DbWorker<T> {
     }
 
     private File getRemoteFile(){
-        //进入远程目录
-        ftp.cd(remotePath);
         //下载远程文件
-        File localWorkerFile = FileUtil.file(remoteFilePath);
-        ftp.download("/opt/upload", fileName, localWorkerFile);
+        File localWorkerFile = FileUtil.file(localWorkerPath);
+        ftp.download(remotePath, fileName, localWorkerFile);
         return localWorkerFile;
     }
 
