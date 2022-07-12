@@ -5,10 +5,11 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IORuntimeException;
 import cn.hutool.extra.ftp.Ftp;
 import cn.hutool.log.Log;
+import lombok.Data;
 import org.springcat.logcdr.file2db.core.File2DbWorker;
-
 import java.io.File;
 
+@Data
 public abstract class FtpFile2DbWorker<T> extends File2DbWorker<T> {
 
     private Ftp ftp = new Ftp("172.0.0.1");
@@ -21,11 +22,11 @@ public abstract class FtpFile2DbWorker<T> extends File2DbWorker<T> {
 
     private String localBackupPath;
 
-    private String remoteFilePath = remotePath + FileUtil.FILE_SEPARATOR + fileName;
+    private String remoteFilePath = remotePath  + FileUtil.FILE_SEPARATOR + fileName;
 
     private String localWorkFilePath = localWorkerPath + FileUtil.FILE_SEPARATOR + fileName;
 
-    private String localBackupFilePath = localWorkerPath + FileUtil.FILE_SEPARATOR + fileName;
+    private String localBackupFilePath = localBackupPath + FileUtil.FILE_SEPARATOR + fileName;
 
 
     @Override
@@ -42,7 +43,7 @@ public abstract class FtpFile2DbWorker<T> extends File2DbWorker<T> {
 
     private File getRemoteFile(){
         //下载远程文件
-        File localWorkerFile = FileUtil.file(localWorkerPath);
+        File localWorkerFile = FileUtil.file(localWorkFilePath);
         ftp.download(remotePath, fileName, localWorkerFile);
         return localWorkerFile;
     }
@@ -53,11 +54,11 @@ public abstract class FtpFile2DbWorker<T> extends File2DbWorker<T> {
 
     private boolean backupLocalFile(){
         try {
-            FileUtil.move(FileUtil.newFile(localWorkerPath),FileUtil.newFile(localBackupFilePath),false);
+            FileUtil.move(FileUtil.newFile(localWorkFilePath),FileUtil.newFile(localBackupFilePath),false);
         }catch (IORuntimeException exception){
             String rename = localBackupFilePath + DateUtil.current();
             try {
-                FileUtil.move(FileUtil.newFile(localWorkerPath), FileUtil.newFile(rename), false);
+                FileUtil.move(FileUtil.newFile(localWorkFilePath), FileUtil.newFile(rename), false);
             }catch (Exception e){
                 Log.get().error(e);
                 return false;
