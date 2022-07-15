@@ -1,6 +1,7 @@
 package org.springcat.logcdr;
 
 
+import cn.hutool.core.thread.GlobalThreadPool;
 import lombok.Data;
 import org.springcat.logcdr.file2db.core.File2DbWorker;
 import org.springcat.logcdr.file2db.workerimpl.LocalFile2DbWorker;
@@ -46,24 +47,25 @@ public class DemoFile2DbWorker extends LocalFile2DbWorker<DemoFile2DbWorker.Demo
         demoEntity.setBookId(colums.get(2));
         demoEntity.setOptType(colums.get(3));
         demoEntity.setOptTime(colums.get(4));
-        System.out.println("convert:"+demoEntity);
+        LOGGER.info("convert:"+demoEntity);
         return demoEntity;
     }
 
     @Override
     public void save(File2DbWorker<DemoEntity> file2DbWorker, DemoEntity object) {
-        System.out.println("save:"+ object + " thread:"+Thread.currentThread().getId());
-        //save DemoLogCdr
+        LOGGER.info("save:"+ object + " thread:"+Thread.currentThread().getId());
     }
 
     @Override
     public void before(File2DbWorker<DemoEntity> file2DbWorker) {
-        System.out.println("before");
+        LOGGER.info("before");
     }
 
     @Override
     public void after(File2DbWorker<DemoEntity> file2DbWorker) {
-        System.out.println("after");
+        GlobalThreadPool.getExecutor().shutdownNow();
+        LOGGER.info("after");
+
     }
 
 }

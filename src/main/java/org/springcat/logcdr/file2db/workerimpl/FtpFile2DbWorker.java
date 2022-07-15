@@ -5,6 +5,7 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IORuntimeException;
 import cn.hutool.extra.ftp.Ftp;
 import cn.hutool.log.Log;
+import cn.hutool.log.LogFactory;
 import lombok.Data;
 import org.springcat.logcdr.file2db.core.File2DbWorker;
 import java.io.File;

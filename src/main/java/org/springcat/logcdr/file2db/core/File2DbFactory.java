@@ -78,10 +78,12 @@ public class File2DbFactory {
         }
         countDownLatch.await();
 
+        file2DbWorker.report();
+
         //after hook
         file2DbWorker.after(file2DbWorker);
 
-        file2DbWorker.destory();
+
     }
 
 

@@ -3,6 +3,7 @@ package org.springcat.logcdr.file2db.core;
 import cn.hutool.core.date.TimeInterval;
 import cn.hutool.core.thread.GlobalThreadPool;
 import cn.hutool.log.Log;
+import cn.hutool.log.LogFactory;
 import lombok.Data;
 import java.io.File;
 import java.util.List;
@@ -18,6 +19,8 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 @Data
 public abstract class File2DbWorker<T> {
+
+    public final Log LOGGER = LogFactory.get();
 
     private int dbOutputNum = 5;
 
@@ -35,16 +38,15 @@ public abstract class File2DbWorker<T> {
     //默认使用全局的threadpool，重要业务可以自定义传入thread pool
     private ExecutorService workPool = GlobalThreadPool.getExecutor();
 
-    public abstract File init();
-
-    public void destory(){
+    public void report(){
         Log.get(this.getClass()).info("file2db stop cost:{},success:{},faild:{}",timeInterval.interval(),successNum, failedNum);
-        GlobalThreadPool.getExecutor().shutdownNow();
     }
 
     public abstract T covertTo(File2DbWorker<T> file2DbWorker, List<String> colums);
 
     public abstract void save(File2DbWorker<T> file2DbWorker, T object);
+
+    public abstract File init();
 
     public abstract void before(File2DbWorker<T> file2DbWorker);
 
