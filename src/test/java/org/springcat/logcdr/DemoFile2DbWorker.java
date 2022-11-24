@@ -63,7 +63,7 @@ public class DemoFile2DbWorker extends LocalFile2DbWorker<DemoFile2DbWorker.Demo
 
     @Override
     public void after(File2DbWorker<DemoEntity> file2DbWorker) {
-        GlobalThreadPool.getExecutor().shutdownNow();
+//        GlobalThreadPool.getExecutor().shutdownNow();
         LOGGER.info("after");
 
     }

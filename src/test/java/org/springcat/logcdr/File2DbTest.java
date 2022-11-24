@@ -11,5 +11,8 @@ public class File2DbTest {
 
         LocalFile2DbWorker<DemoFile2DbWorker.DemoEntity> localFile2DbWorker = new DemoFile2DbWorker("/Users/springcat/Downloads/ireadsnsplt00480819X20220510091359.txt");
         File2DbFactory.start(localFile2DbWorker);
+
+        LocalFile2DbWorker<DemoFile2DbWorker.DemoEntity> localFile2DbWorker2 = new DemoFile2DbWorker("/Users/springcat/Downloads/ireadsnsplt00480819X202205100913591.txt");
+        File2DbFactory.start(localFile2DbWorker2);
     }
 }
